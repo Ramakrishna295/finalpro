@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>PenBank Website</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <style>
+        /* Reset default list styles */
+        ul, li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #003366;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+          
+        }
+
+        /* Navigation styles */
+        nav {
+            background-color: #f2f2f2;
+            padding: 10px;
+        }
+
+        nav ul {
+            text-align: center;
+        }
+
+        nav li {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        nav a {
+            display: block;
+            color: #333;
+            text-decoration: none !important; /* Add !important to override other styles */
+            padding: 10px;
+            border-bottom: none; /* Remove the underline */
+        }
+
+        /* Dropdown styles */
+        nav ul ul {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            padding: 0;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        nav ul li:hover > ul {
+            display: block;
+        }
+
+        nav ul ul li {
+            display: block;
+            width: 100%;
+        }
+
+        nav ul ul a {
+            padding: 10px;
+        }
+
+        /* Positioning styles */
+        nav ul ul ul {
+            left: 100%;
+            top: 0;
+        }
+
+        /* Animation styles */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav ul ul li {
+            animation: fade-in 0.3s ease-in-out;
+        }
+
+        footer {
+            background-color: #003366;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        main {
+            min-height: calc(100vh - 100px); /* Subtract the header and footer height */
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: block;
+            color: #333;
+            text-decoration: none !important;
+            padding: 10px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        /* Adjust button width in nested lists */
+        nav ul ul .btn {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Thymeleaf version -->
+<div th:fragment="penBankTemplate">
+    <header>
+        <h1>Hamara Bank</h1>
+        <p>India's Largest Banking Platform</p>
+    </header>
+
+    <nav>
+        <!-- Main List -->
+        <ul>
+            <!-- DashBoard List -->
+            <li>
+                <button class="btn">DashBoard</button>
+                <ul>
+                    <li id="cashchest"><button class="btn">CashChest</button></li>
+                    <li id="accounts"><button class="btn">Accounts</button></li>
+                    <li id="loans"><button class="btn">Loans</button></li>
+                 </ul>
+            </li>
+            <!-- DashBoard List Ending-->
+
+            <!-- Accounts List -->
+            <li>
+                <button class="btn">Accounts</button>
+                <ul>
+                    <!-- Savings -->
+                    <li>
+                        <button class="btn">Savings</button>
+                        <ul>
+                            <li id="savingsacc" data-value="savings"><button value="Savings"  class="btn">View Accounts</button></li>
+                            <li id="savingsapp"  data-value="savings"><button value="Savings" class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+
+                    <!-- Current -->
+                    <li>
+                        <button class="btn">Current</button>
+                        <ul>
+                            <li id="currentacc" data-value="current"><button class="btn">View Accounts</button></li>
+                            <li id="currentapp" data-value="current"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+
+                    <!-- Recurrent -->
+                    <li>
+                        <button class="btn">Recurrent</button>
+                        <ul>
+                            <li id="recurrentacc" data-value="recurrent"><button class="btn">View Accounts</button></li>
+                            <li id="recurrentapp" data-value="recurrent"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+
+                    <!-- Fixed Deposit -->
+                    <li>
+                        <button class="btn">Fixed Deposit</button>
+                        <ul>
+                            <li id="FDacc" data-value="fixed"><button class="btn">View Accounts</button></li>
+                            <li id="FDapp" data-value="Fixed Deposit"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <!-- Accounts List Closed -->
+
+            <!-- Loans List -->
+            <li>
+                <button class="btn">Loans</button>
+                <ul>
+                    <!-- Personal -->
+                    <li>
+                        <button class="btn">Personal</button>
+                        <ul>
+                            <li  id="Personalacc" data-value="PL"><button class="btn">View Loans</button></li>
+                            <li id="Personalapp" data-value="PL"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+
+                    <!-- Vehicle -->
+                    <li>
+                        <button class="btn">Vehicle</button>
+                        <ul>
+                            <li  id="Vehicleacc" data-value="Vehicle"><button class="btn">View Loans</button></li>
+                            <li id="Vehicleapp" data-value="Vehicle"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+
+                    <!-- Gold -->
+                    <li>
+                        <button class="btn">Gold</button>
+                        <ul>
+                            <li id="Goldacc" data-value="Gold"><button class="btn">View Loans</button></li>
+                            <li  id="Goldapp" data-value="Gold"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+
+                    <!-- Mortage -->
+                    <li>
+                        <button class="btn">Mortage</button>
+                        <ul>
+                            <li  id="Mortageacc" data-value="Mortage"><button class="btn">View Loans</button></li>
+                            <li   id="Mortageapp" data-value="Mortage"><button class="btn">View Applications</button></li>
+                        </ul>
+                    </li>
+                    <li  id="redirected" data-value="redirected"><button class="btn">View redirected Applications</button></li>
+                </ul>
+            </li>
+            <!-- Loans List Closed -->
+
+            <!-- Transactions List -->
+            <li>
+                <button class="btn">Transactions</button>
+                <ul>
+                    <li>
+                        <button class="btn">Deposit</button>
+                        <ul>
+                            <li id="loanrepay"><button class="btn">Loan Repayment</button></li>
+                            <li id="moneydeposit"><button class="btn">Money Deposit</button></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button class="btn">Withdrawl</button>
+                        <ul>
+                            <li id="loanwithdraw"><button class="btn">Loan Withdrawl</button></li>
+                            <li id="moneywithdraw"><button class="btn">Money Withdrawl</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <!-- Transactions Closed -->
+
+            <li><button class="btn">Application Forms</button>
+                <ul>
+                    <li id="newaccount"><button class="btn">Account Form</button></li>
+                    <li id = "newloan"><button class="btn">Loan Form</button></li>
+                </ul>
+            </li>
+
+            <!-- Customers -->
+            <li id = "customers"><button class="btn">Customers</button></li>
+            
+             <!-- auditlogs -->
+            <li id = "auditlogs"><button class="btn">Audit logs</button></li>
+
+            <!-- Users -->
+            <li>
+                <button class="btn">Users</button>
+                <ul>
+                    <li id = "adduser"><button class="btn">Add User</button></li>
+                    <li id = "listusers"><button class="btn">List Users</button></li>
+                </ul>
+            </li>
+            <!-- Users closed -->
+
+            <li><button class="btn">P&amp;L</button></li>
+
+            <li>
+                <button class="btn">Security</button>
+                <ul>
+                    <li id="permissions"><button class="btn">Permission Management</button></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <main id="main-content"></main>
+</div>
+
+<!-- Thymeleaf version ends here -->
+<script>
+    // JavaScript to handle page load on Neeraj dropdown click
+    $(document).ready(function() {
+        var adduser = $('#adduser');
+        var mainContent = $('#main-content');
+
+        adduser.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'addUser',
+                type: 'POST',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+      //--------------------------    list users button ajax call       --------------------------
+      var listusers = $('#listusers');
+        var mainContent = $('#main-content');
+      
+        listusers.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'mainUser',
+                type: 'GET',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        
+        //--------------------------- Master Entry Accounts------------------------
+        var accounts = $('#accounts');
+        var mainContent = $('#main-content');
+      
+        accounts.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'account_data_save',
+                type: 'POST',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        //--------------------------- Master Entry Loans------------------------
+        var loans = $('#loans');
+        var mainContent = $('#main-content');
+      
+        loans.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'loan_data_save',
+                type: 'POST',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+      //--------------------------- Account New Application------------------------
+        var newaccount = $('#newaccount');
+        var mainContent = $('#main-content');
+      
+        newaccount.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Account_new_application_form',
+                type: 'GET',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        //------------------------------------ Loans New Application -------------------
+        var newloan = $('#newloan');
+        var mainContent = $('#main-content');
+      
+        newloan.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'loan_new_application_form',
+                type: 'GET',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        // ------------------------------- Customers ------------------------------
+        var customers = $('#customers');
+        var mainContent = $('#main-content');
+      
+        customers.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'customers',
+                type: 'POST',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        // ------------------------------------ savingsaccountview -------------------
+        var savingsacc = $('#savingsacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Any_Type_account_info',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#currentacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Any_Type_account_info',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#recurrentacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Any_Type_account_info',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#FDacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Any_Type_account_info',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        //---------------------------------- savingsapplication -------------------------
+        var savingsapp = $('#savingsapp');
+        var mainContent = $('#main-content');
+      	
+        savingsapp.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'New_account_application',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsapp = $('#currentapp');
+        var mainContent = $('#main-content');
+      	
+        savingsapp.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'New_account_application',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsapp = $('#recurrentapp');
+        var mainContent = $('#main-content');
+      	
+        savingsapp.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'New_account_application',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsapp = $('#FDapp');
+        var mainContent = $('#main-content');
+      	
+        savingsapp.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'New_account_application',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        // ------------------------------------
+        
+    
+    //================================================================================loanaccounts
+    	var savingsacc = $('#Personalacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Account',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+    	var savingsacc = $('#Vehicleacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Account',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+    	var savingsacc = $('#Goldacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Account',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+     	var savingsacc = $('#Mortgageacc');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'Account',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+    //=================================================================
+    	var savingsacc = $('#Mortgageapp');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'get_applications',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#Goldapp');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'get_applications',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#Vehicleapp');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'get_applications',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#Personalapp');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 var listItemValue = $(this).data("value");
+    console.log(listItemValue);
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'get_applications',
+                type: 'POST',
+                data:{hrefValue:listItemValue},
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#redirected');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'redirected',
+                type: 'GET',
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        //========================================================
+        var savingsacc = $('#newloan');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		 
+            // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'loan_new_application_form',
+                type: 'GET',
+                
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var savingsacc = $('#newaccount');
+        var mainContent = $('#main-content');
+      	
+        savingsacc.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		             // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'New_account_application',
+                type: 'GET',
+                
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        
+     //========================loans transactions==========================
+    	var loanrepay = $('#loanrepay');
+        var mainContent = $('#main-content');
+      	
+        loanrepay.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		             // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'loanrepay',
+                type: 'GET',
+                
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+    	 
+        var loanwithdraw = $('#loanwithdraw');
+        var mainContent = $('#main-content');
+      	
+        loanwithdraw.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		             // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'lowid',
+                type: 'GET',
+                
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        
+        //================================================account transactions========================
+        	
+        	var moneydeposit = $('#moneydeposit');
+        var mainContent = $('#main-content');
+      	
+        moneydeposit.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		             // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'moneydeposit',
+                type: 'GET',
+                
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        var moneywithdraw = $('#moneywithdraw');
+        var mainContent = $('#main-content');
+      	
+        moneywithdraw.on('click', function(event) {
+            // Prevent the default behavior of the anchor tag
+		             // Load Neeraj page content using AJAX
+            $.ajax({
+                url: 'withdrawl',
+                type: 'GET',
+                
+                success: function(response) {
+                    mainContent.html(response);
+                },
+                error: function() {
+                    alert('Failed to load page.');
+                }
+            });
+        });
+        
+        //================================auditlogs==========================
+        	
+        	
+        	var auditlogs = $('#auditlogs');
+            var mainContent = $('#main-content');
+          	
+            auditlogs.on('click', function(event) {
+                // Prevent the default behavior of the anchor tag
+    		             // Load Neeraj page content using AJAX
+                $.ajax({
+                    url: 'auditLogs',
+                    type: 'GET',
+                    
+                    success: function(response) {
+                        mainContent.html(response);
+                    },
+                    error: function() {
+                        alert('Failed to load page.');
+                    }
+                });
+                
+            });
+         //=======================================================================================
+
+            	var cashchest = $('#cashchest');
+                var mainContent = $('#main-content');
+                cashchest.on('click', function(event) {
+                 
+                    $.ajax({
+                        url: 'cashchest',
+                        type: 'GET',
+                        
+                        success: function(response) {
+                            mainContent.html(response);
+                        },
+                        error: function() {
+                            alert('Failed to load page.');
+                        }
+                    });
+                });
+                
+    });
+         
+            //======================================================================================
+            	
+            	
+</script>
+
+<style>
+    .btn {
+        display: block;
+        color: #333;
+        text-decoration: none !important;
+        padding: 10px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+</style>
+<footer>
+    &copy; 2023 PenBank. All rights reserved.
+  </footer>
+
+</body>
+</html>

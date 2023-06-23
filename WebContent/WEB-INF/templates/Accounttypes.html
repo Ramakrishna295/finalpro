@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank Account Selection</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container" id=" co">
+        <h1>Select Account Type</h1>
+        <div class="form-group">
+            <label for="accountType">Account Type:</label>
+            <select class="form-control" id="accountType">
+                <option value="savings">Savings Account</option>
+                <option value="fixed">Fixed Deposit</option>
+                <option value="recurrent">Recurring Deposit</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" onclick="submitAccountType()">Submit</button>
+    </div>
+    <div id="row">
+    </div>
+    <button class="btn btn-primary" onclick="submit()">caluclateIntrest</button>
+    <!-- Include Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        function submitAccountType() {
+            var accountType = document.getElementById("accountType").value;
+            switch (accountType) {
+            case "savings":
+            	   
+          	               $.ajax({
+          	                url:'get_savings',
+          	                 method:'get',
+          	                 data:{accountType:accountType},
+          	                success: function (resultText) {
+          	    	       $('#row').html(resultText);
+          	                },
+          	               error: function (jqXHR, exception) {
+          	                 console.log('Error occurred!');
+          	               }
+          	               })
+                 
+                console.log("Savings Account selected");
+                break;
+            case "fixed":
+	               $.ajax({
+     	                url:'get_accounts',
+     	                 method:'get',
+     	                 data:{accountType:accountType},
+     	                success: function (resultText) {
+     	    	       $('#row').html(resultText);
+     	                },
+     	               error: function (jqXHR, exception) {
+     	                 console.log('Error occurred!');
+     	               }
+     	               })
+                console.log("Fixed Deposit selected");
+                break;
+            case "recurrent":
+	               $.ajax({
+     	                url:'get_accounts',
+     	                 method:'get',
+     	                 data:{accountType:accountType},
+     	                success: function (resultText) {
+     	    	       $('#row').html(resultText);
+     	                },
+     	               error: function (jqXHR, exception) {
+     	                 console.log('Error occurred!');
+     	               }
+     	               })
+                console.log("Recurring Deposit selected");
+                break;
+            default:
+                break;   
+        }
+        }
+        function submit() {
+            var accountType = document.getElementById("accountType").value;
+            console.log(accountType);
+                     $.ajax({
+          	                 url:'caluclate_intrest',
+          	                 method:'get',
+          	                 data:{accountType:accountType},
+          	                success: function (resultText) {
+          	    	       $('#row').html(resultText);
+          	                },
+          	               error: function (jqXHR, exception) {
+          	                 console.log('Error occurred!');
+          	               }
+          	               })
+                 
+                console.log("Savings Account selected");
+        }
+    </script>
+</body>
+</html>
